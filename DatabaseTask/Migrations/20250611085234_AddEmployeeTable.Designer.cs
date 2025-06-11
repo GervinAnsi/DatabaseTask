@@ -4,6 +4,7 @@ using DatabaseTask.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatabaseTask.Migrations
 {
     [DbContext(typeof(DatabaseTaskDbContext))]
-    partial class DatabaseTaskDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250611085234_AddEmployeeTable")]
+    partial class AddEmployeeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,31 +170,6 @@ namespace DatabaseTask.Migrations
                     b.ToTable("EmployeeAccess");
                 });
 
-            modelBuilder.Entity("DatabaseTask.Models.Equipment", b =>
-                {
-                    b.Property<int>("EquipmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EquipmentId"));
-
-                    b.Property<string>("Condition")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("EquipmentId");
-
-                    b.ToTable("Equipment");
-                });
-
             modelBuilder.Entity("DatabaseTask.Models.HealthCheck", b =>
                 {
                     b.Property<int>("HealthCheckId")
@@ -216,7 +194,7 @@ namespace DatabaseTask.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("HealthChecks");
+                    b.ToTable("HealthCheck");
                 });
 
             modelBuilder.Entity("DatabaseTask.Models.JobTitle", b =>
@@ -238,7 +216,7 @@ namespace DatabaseTask.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("JobTitles");
+                    b.ToTable("JobTitle");
                 });
 
             modelBuilder.Entity("DatabaseTask.Models.Loan", b =>
@@ -255,9 +233,6 @@ namespace DatabaseTask.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("EquipmentId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -265,9 +240,7 @@ namespace DatabaseTask.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("EquipmentId");
-
-                    b.ToTable("Loans");
+                    b.ToTable("Loan");
                 });
 
             modelBuilder.Entity("DatabaseTask.Models.SickLeave", b =>
@@ -299,7 +272,7 @@ namespace DatabaseTask.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("SickLeaves");
+                    b.ToTable("SickLeave");
                 });
 
             modelBuilder.Entity("DatabaseTask.Models.Vacation", b =>
@@ -329,7 +302,7 @@ namespace DatabaseTask.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("Vacations");
+                    b.ToTable("Vacation");
                 });
 
             modelBuilder.Entity("DatabaseTask.Models.Child", b =>
@@ -392,10 +365,6 @@ namespace DatabaseTask.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DatabaseTask.Models.Equipment", null)
-                        .WithMany("Loans")
-                        .HasForeignKey("EquipmentId");
-
                     b.Navigation("Employee");
                 });
 
@@ -439,11 +408,6 @@ namespace DatabaseTask.Migrations
                     b.Navigation("SickLeaves");
 
                     b.Navigation("Vacations");
-                });
-
-            modelBuilder.Entity("DatabaseTask.Models.Equipment", b =>
-                {
-                    b.Navigation("Loans");
                 });
 
             modelBuilder.Entity("DatabaseTask.Models.JobTitle", b =>
